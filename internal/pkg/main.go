@@ -1,5 +1,5 @@
 /** This package creates a new package to your golang project */
-package create
+package pkg
 
 import (
 	"fmt"

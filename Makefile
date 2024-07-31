@@ -32,6 +32,3 @@ encrypt: .env
 
 decrypt: .env.gpg
 	@go run main.go decrypt .env
-
-gen:
-	@go run main.go create ${name} ${folder}
