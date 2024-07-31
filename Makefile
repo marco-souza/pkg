@@ -6,6 +6,7 @@ test ?= "."
 
 all: install run
 
+i: install
 install:
 	go install golang.org/x/tools/gopls@latest && \
 	go install github.com/marco-souza/hooker@latest && hooker init && \
@@ -20,6 +21,7 @@ build: main.go
 fmt:
 	go fmt ./...
 
+t: test
 test:
 	go test ${flags} ./...
 
