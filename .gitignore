@@ -1,2 +1,5 @@
 # build assets
 build
+
+# ignore .env files
+.env

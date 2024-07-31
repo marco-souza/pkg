@@ -26,14 +26,12 @@ test:
 bench: tests/bench/...
 	go test -bench=${test} ./tests/bench/... -count=${count} -benchmem -benchtime=${time}
 
-# TODO: implement in pkg
 encrypt: .env
-	gpg -c .env
-	sed -e 's/=.*/=""/g' .env > .env.example
+	@go run main.go encrypt .env
+	@sed -e 's/=.*/=""/g' .env > .env.example # TODO: implement in pkg
 
-# TODO: implement in pkg
 decrypt: .env.gpg
-	gpg -d .env.gpg > .env
+	@go run main.go decrypt .env
 
 # TODO: implement in pkg
 gen:
