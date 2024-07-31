@@ -9,7 +9,8 @@ all: install run
 install:
 	go install github.com/go-task/task/v3/cmd/task@latest && \
 	go install golang.org/x/tools/gopls@latest && \
-	go install github.com/marco-souza/hooker@latest && hooker init
+	go install github.com/marco-souza/hooker@latest && hooker init && \
+	go install .
 
 run: main.go
 	go run ${flags} main.go
@@ -33,6 +34,5 @@ encrypt: .env
 decrypt: .env.gpg
 	@go run main.go decrypt .env
 
-# TODO: implement in pkg
 gen:
-	@go run ./cmd/cli/cli.go create ${folder} ${name}
+	@go run main.go create ${name} ${folder}
