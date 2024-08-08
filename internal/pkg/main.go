@@ -22,7 +22,7 @@ func CreatePackage(packageName, folder string) {
 	os.MkdirAll(folder, os.ModePerm)
 
 	// Create the main.go file
-	mainFile := filepath.Join(folder, "main.go")
+	mainFile := filepath.Join(folder, packageName+".go")
 	f, err := os.Create(mainFile)
 	if err != nil {
 		fmt.Println("error creating main.go file", err)
@@ -44,7 +44,7 @@ func CreatePackage(packageName, folder string) {
 	f.Close()
 
 	// create the main_test.go file
-	testFile := filepath.Join(folder, "main_test.go")
+	testFile := filepath.Join(folder, packageName+"_test.go")
 	f, err = os.Create(testFile)
 	if err != nil {
 		fmt.Println("error creating main_test.go file", err)
