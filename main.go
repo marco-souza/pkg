@@ -1,15 +1,10 @@
+/*
+Copyright © 2024 NAME HERE <EMAIL ADDRESS>
+*/
 package main
 
-import (
-	"os"
-
-	"github.com/marco-souza/pkg/cmd/cli"
-)
+import "github.com/marco-souza/pkg/cmd"
 
 func main() {
-	err := cli.Execute()
-	if err != nil {
-		cli.Fallback()
-		os.Exit(1)
-	}
+	cmd.Execute()
 }

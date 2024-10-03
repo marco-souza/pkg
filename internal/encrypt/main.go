@@ -10,60 +10,59 @@ import (
 )
 
 // encrypt a file like gpg
-func EncryptFile(filepath, passphrase string) {
+func EncryptFile(filepath, passphrase string) error {
 	if filepath == "" {
 		fmt.Println("please provide a file path")
-		return
+		return fmt.Errorf("no file path provided")
 	}
+
+	fmt.Println("encrypting file", filepath)
 
 	// read filepath
 	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println("error opening file", err)
-		return
+		return fmt.Errorf("error opening file: %w", err)
 	}
 
 	// create file .gpg
 	outputFile, err := os.Create(filepath + ".gpg")
 	if err != nil {
-		fmt.Println("error creating output file", err)
-		return
+		return fmt.Errorf("error creating output file: %w", err)
 	}
 
 	// create a new writer
 	w, err := openpgp.SymmetricallyEncrypt(outputFile, []byte(passphrase), nil, nil)
 	if err != nil {
-		fmt.Println("error creating writer", err)
-		return
+		return fmt.Errorf("error creating writer: %w", err)
 	}
 
 	if _, err := io.Copy(w, file); err != nil {
-		fmt.Println("error copying file", err)
-		return
+		return fmt.Errorf("error copying file: %w", err)
 	}
 
 	// close the writer
 	if err := w.Close(); err != nil {
-		fmt.Println("error closing writer", err)
-		return
+		return fmt.Errorf("error closing writer: %w", err)
 	}
+
+	return nil
 }
 
-func DecryptFile(filepath, passphrase string) {
+func DecryptFile(filepath, passphrase string) error {
 	if filepath == "" {
-		fmt.Println("please provide a file path")
-		return
+		return fmt.Errorf("no file path provided")
 	}
 
 	if !strings.Contains(filepath, ".gpg") {
 		filepath += ".gpg"
 	}
 
-	// read filepath
+	output := filepath[:len(filepath)-4]
+	fmt.Println("decrypting file", filepath, "to", output)
+
 	file, err := os.Open(filepath)
 	if err != nil {
-		fmt.Println("error opening file", err)
-		return
+		return fmt.Errorf("error opening file: %w", err)
 	}
 
 	// decrypt symmetrically encrypted file with passphrase
@@ -76,21 +75,18 @@ func DecryptFile(filepath, passphrase string) {
 
 	msgDetails, err := openpgp.ReadMessage(file, nil, promptFunc, nil)
 	if err != nil {
-		fmt.Println("error reading message", err)
-		return
+		return fmt.Errorf("error reading message: %w", err)
 	}
 
-	fmt.Println("decrypting file", msgDetails.LiteralData.FileName, "to", filepath[:len(filepath)-4])
-
 	// create file without .gpg
-	outputFile, err := os.Create(filepath[:len(filepath)-4])
+	outputFile, err := os.Create(output)
 	if err != nil {
-		fmt.Println("error creating output file", err)
-		return
+		return fmt.Errorf("error creating output file: %w", err)
 	}
 
 	if _, err := io.Copy(outputFile, msgDetails.UnverifiedBody); err != nil {
-		fmt.Println("error copying file", err)
-		return
+		return fmt.Errorf("error copying file: %w", err)
 	}
+
+	return nil
 }
