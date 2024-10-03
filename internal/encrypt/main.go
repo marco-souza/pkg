@@ -80,7 +80,7 @@ func DecryptFile(filepath, passphrase string) {
 		return
 	}
 
-	fmt.Println("decrypting file", msgDetails.LiteralData.FileName, "to", filepath[:len(filepath)-4])
+	fmt.Println("decrypting file to", "to", filepath[:len(filepath)-4])
 
 	// create file without .gpg
 	outputFile, err := os.Create(filepath[:len(filepath)-4])
