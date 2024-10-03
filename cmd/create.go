@@ -12,30 +12,23 @@ import (
 )
 
 var createCmd = &cobra.Command{
-	Use:   "create",
-	Short: "Create a package module for go",
+	Use:        "create",
+	Short:      "Create a package module for go",
+	Long:       `Create a package module for go`,
+	Args:       cobra.RangeArgs(1, 2),
+	ArgAliases: []string{"package", "folder"},
 	Run: func(cmd *cobra.Command, args []string) {
-		switch len(args) {
-		case 0:
-			fmt.Println("package not found")
+		packageName := args[0]
+		message := "creating package " + packageName
 
-		case 1, 2:
-			packageName := args[0]
-			message := "creating package " + packageName
-
-			folder := ""
-			if len(args) == 2 {
-				folder = args[1]
-				message += " in " + folder
-			}
-
-			fmt.Println(message)
-			pkg.CreatePackage(packageName, folder)
-
-		default:
-			fmt.Println("too many arguments")
-			return
+		folder := ""
+		if len(args) == 2 {
+			folder = args[1]
+			message += " in " + folder
 		}
+
+		fmt.Println(message)
+		pkg.CreatePackage(packageName, folder)
 	},
 }
 
