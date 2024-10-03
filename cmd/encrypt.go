@@ -37,8 +37,10 @@ var encryptCmd = &cobra.Command{
 			passphrase = string(file)
 		}
 
-		fmt.Println("encrypt file", filepath)
-		encrypt.EncryptFile(filepath, passphrase)
+		if err := encrypt.EncryptFile(filepath, passphrase); err != nil {
+			fmt.Println("Error encrypting file", err)
+			os.Exit(1)
+		}
 	},
 }
 
