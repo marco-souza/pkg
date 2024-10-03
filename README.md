@@ -1,6 +1,6 @@
 # `pkg`
 
-CLI tool to speed-up goland development
+CLI tool to speed-up software development
 
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
 [![Go Reference](https://pkg.go.dev/badge/github.com/marco-souza/pkg.svg)](https://pkg.go.dev/github.com/marco-souza/pkg)
