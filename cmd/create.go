@@ -1,7 +1,3 @@
-/* Create a package module
- *
- * $ pkg create <package-name> <folder>
- */
 package cmd
 
 import (
