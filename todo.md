@@ -8,8 +8,8 @@
 - [ ] fea: manage environment variables `pkg env set|del <name> <value>`
 - [ ] fea: manage semantic versioning (semver) `pkg version <major|minor|patch>`
 - [ ] ci: setup gh actions to publish new version
-- [ ] oth: use latest go version
-- [ ] doc: write a better README.md
+- [x] oth: use latest go version
+- [x] doc: write a better README.md
 
 ## Work in progress
 
