@@ -11,7 +11,6 @@ import (
 
 const DEFAULT_PASSPHRASE = "password"
 
-// decryptCmd represents the decrypt command
 var decryptCmd = &cobra.Command{
 	Use:        "decrypt",
 	Short:      "Decrypt a file",
