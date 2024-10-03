@@ -2,7 +2,7 @@
 
 ### Milestone v1
 
-- [ ] ref: generate commands using [cobra-cli](https://github.com/spf13/cobra-cli)
+- [x] ref: generate commands using [cobra-cli](https://github.com/spf13/cobra-cli)
 - [ ] ref: use templates for scaffold new packages
 - [ ] fea: degit template cloning feature
 - [ ] fea: manage environment variables `pkg env set|del <name> <value>`
