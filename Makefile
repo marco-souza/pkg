@@ -13,20 +13,14 @@ install:
 	go install .
 
 run: main.go
-	go run ${flags} main.go
-
-build: main.go
-	go build -o ${dist}/pkg ${flags} main.go
+	@go run main.go
 
 fmt:
 	go fmt ./...
 
 t: test
 test:
-	go test ${flags} ./...
-
-bench: tests/bench/...
-	go test -bench=${test} ./tests/bench/... -count=${count} -benchmem -benchtime=${time}
+	go test ./...
 
 encrypt: .env
 	@go run main.go encrypt .env
