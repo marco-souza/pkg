@@ -26,15 +26,22 @@ pkg
 pkg -h
 
 pkg create <module> <folder> - scaffold a new go module
+
+# encrypting files
 pkg encrypt <file> - encrypt a file
 pkg decrypt <file> - decrypt a file
+
+# managing envs
+pkg envs get <name>         - set an environment variable
+pkg envs set <name> <value> - set an environment variable
+pkg envs del <name> <value> - set an environment variable
 ```
 
 ## Coming soon
 
 ```bash
-pkg env set <name> <value> - set an environment variable
-pkg env del <name> <value> - set an environment variable
+pkg envs init <name> - create a new environment file
+pkg version [patch|minor|major] - manage semantic versioning
 pkg <guthub-username>/<repo> [name]- close repo as template for a new [name] project (like degit)
 ```
 

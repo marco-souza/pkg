@@ -35,6 +35,7 @@ var decryptCmd = &cobra.Command{
 			passphrase = string(file)
 		}
 
+		// TODO: add timeout in case passphrase is not valid
 		if err := encrypt.DecryptFile(filepath, passphrase); err != nil {
 			fmt.Println("Error decrypting file", err)
 			os.Exit(1)

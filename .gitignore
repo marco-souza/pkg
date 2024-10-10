@@ -3,3 +3,4 @@ build
 
 # ignore .env files
 .env
+.pass
