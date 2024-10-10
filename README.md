@@ -32,17 +32,17 @@ pkg encrypt <file> - encrypt a file
 pkg decrypt <file> - decrypt a file
 
 # managing envs
-pkg envs get <name>         - set an environment variable
+pkg envs del <name>         - remove an environment variable
+pkg envs get <name>         - get an environment variable
 pkg envs set <name> <value> - set an environment variable
-pkg envs del <name> <value> - set an environment variable
 ```
 
 ## Coming soon
 
 ```bash
-pkg envs init <name> - create a new environment file
-pkg version [patch|minor|major] - manage semantic versioning
-pkg <guthub-username>/<repo> [name]- close repo as template for a new [name] project (like degit)
+pkg envs init <name>                - create a new environment file
+pkg version [patch|minor|major]     - manage semantic versioning
+pkg <guthub-username>/<repo> [name] - close repo as template for a new [name] project (like degit)
 ```
 
 ## References
