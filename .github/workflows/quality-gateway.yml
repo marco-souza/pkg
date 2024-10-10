@@ -16,6 +16,9 @@ jobs:
       - name: Run tests
         run: go test ./...
 
+      - name: Run mod verify
+        run: go mod verify
+
       - name: Test build
         run: go build . && ./pkg
 
