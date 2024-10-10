@@ -4,7 +4,7 @@ on: [push]
 
 # run go tests
 jobs:
-  quality-gateway:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,18 +13,23 @@ jobs:
         with:
           go-version: 1.23.2
 
-      - name: Run tests
-        run: go test ./...
+      - name: setup PATH with GOPATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH && echo $PATH && echo $GITHUB_PATH
 
-      - name: Run mod verify
-        run: go mod verify
-
-      - name: Test build
-        run: go build . && ./pkg
-
-      - name: Test package install (local)
+      - name: Install package (local)
         run: go install . && pkg
 
-      - name: Test package install (remote)
-        run: go install -u github.com/marco-souza/pkg@latest && pkg
+      - name: Install package (remote)
+        run: go install github.com/marco-souza/pkg@latest && pkg
 
+  tests:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: go test ./...
+      - name: Run mod verify
+        run: go mod verify
+      - name: Build test
+        run: go build . && ./pkg

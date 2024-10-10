@@ -15,7 +15,7 @@ CLI tool to speed-up software development
 ## Installation
 
 ```bash
-go install -u github.com/marco-souza/pkg@latest
+go install github.com/marco-souza/pkg@latest
 
 pkg
 ```
