@@ -1,0 +1,36 @@
+name: Quality Gateway
+
+on: [push]
+
+# run go tests
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.23.2
+
+      - name: setup PATH with GOPATH
+        run: echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Install package (local)
+        run: go install . && pkg
+
+      - name: Install package (remote)
+        run: go install github.com/marco-souza/pkg@latest && pkg
+
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run tests
+        run: go test ./...
+
+      - name: Run mod verify
+        run: go mod verify
+
+      - name: Build test
+        run: go build . && ./pkg
