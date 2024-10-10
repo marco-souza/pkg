@@ -1,6 +1,3 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -22,8 +19,9 @@ var envsCmd = &cobra.Command{
 }
 
 var envsGetCmd = &cobra.Command{
-	Use:   "get",
+	Use:   "get <key>",
 	Short: "Get an environment variable",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		value, err := env.GetEnv(args[0])
 		if err != nil {
@@ -36,14 +34,10 @@ var envsGetCmd = &cobra.Command{
 }
 
 var envsSetCmd = &cobra.Command{
-	Use:   "set",
+	Use:   "set <key> <value>",
 	Short: "Set an environment variable",
+	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 2 {
-			fmt.Println("Invalid number of arguments")
-			return
-		}
-
 		err := env.SetEnv(args[0], args[1])
 		if err != nil {
 			fmt.Println(err)
@@ -58,15 +52,15 @@ var envsSetCmd = &cobra.Command{
 
 		// as password from user input
 		password := getPassphrase()
-
 		fmt.Println("update encrypted file")
 		encrypt.EncryptFile(env.Filepath, password)
 	},
 }
 
 var envsDelCmd = &cobra.Command{
-	Use:   "del",
+	Use:   "del <key>",
 	Short: "Delete an environment variable",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		err := env.DetEnv(args[0])
 		if err != nil {
@@ -82,7 +76,6 @@ var envsDelCmd = &cobra.Command{
 
 		// as password from user input
 		password := getPassphrase()
-
 		fmt.Println("update encrypted file")
 		encrypt.EncryptFile(env.Filepath, password)
 	},
@@ -111,14 +104,4 @@ func init() {
 	envsCmd.AddCommand(envsDelCmd)
 
 	rootCmd.AddCommand(envsCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// envsCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// envsCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
