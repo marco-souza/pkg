@@ -19,3 +19,9 @@ jobs:
       - name: Test build
         run: go build . && ./pkg
 
+      - name: Test package install (local)
+        run: go install . && pkg
+
+      - name: Test package install (remote)
+        run: go install -u github.com/marco-souza/pkg@latest && pkg
+
