@@ -18,14 +18,14 @@ func TestMain(t *testing.T) {
 	env := envs.NewEnv(filepath)
 	assert.NotNil(t, env)
 
-	t.Run("GenerateTemplate", func(t *testing.T) {
-		assert.NoError(t, env.GenerateTemplate())
+	t.Run("GenerateExample", func(t *testing.T) {
+		assert.NoError(t, env.GenerateExample())
 		// check if file exists
-		_, err := os.Stat(filepath + ".template")
+		_, err := os.Stat(filepath + ".example")
 		assert.NoError(t, err)
 
 		// remove file
-		os.Remove(filepath + ".template")
+		os.Remove(filepath + ".example")
 	})
 
 	t.Run("GetEnv", func(t *testing.T) {

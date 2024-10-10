@@ -36,88 +36,100 @@ func (e *Env) GetEnv(key string) (string, error) {
 }
 
 func (e *Env) SetEnv(key, value string) error {
+	return e.processEnvs(ProcessEnvsOpts{
+		LookupKey: key,
+		ProcessFound: func(k, _ string) string {
+			return fmt.Sprintf("%s='%s'\n", key, value)
+		},
+		OnNotFound: func() string {
+			return fmt.Sprintf("%s='%s'\n", key, value)
+		},
+	})
+}
+
+func (e *Env) DetEnv(key string) error {
+	return e.processEnvs(ProcessEnvsOpts{
+		LookupKey: key,
+		ProcessFound: func(k, _ string) string {
+			return ""
+		},
+	})
+}
+
+func (e *Env) GenerateExample() error {
+	return e.processEnvs(ProcessEnvsOpts{
+		OutputFile: e.Filepath + ".example",
+		ParseLine: func(key, _ string) string {
+			return fmt.Sprintf("%s='%s'\n", key, "********")
+		},
+	})
+}
+
+type ProcessEnvsOpts struct {
+	ParseLine    func(key, val string) string
+	ProcessFound func(key, val string) string
+	OnNotFound   func() string
+	OutputFile   string
+	LookupKey    string
+}
+
+func (e *Env) processEnvs(opts ProcessEnvsOpts) error {
 	lines, err := e.readFile()
 	if err != nil {
 		return err
+	}
+
+	if opts.ParseLine == nil {
+		opts.ParseLine = func(k, v string) string {
+			return fmt.Sprintf("%s='%s'\n", k, strings.Trim(v, "'"))
+		}
+	}
+	if opts.OnNotFound == nil {
+		opts.OnNotFound = func() string {
+			return ""
+		}
 	}
 
 	output := ""
 	found := false
 	for _, line := range lines {
+		if strings.Trim(line, " ") == "" {
+			continue
+		}
+
 		parsed := strings.Split(string(line), "=")
 		if len(parsed) != 2 {
 			output += string(line) + "\n"
 			continue
 		}
 
-		if parsed[0] == key {
-			parsed[1] = value
+		key, val := parsed[0], parsed[1]
+		if opts.LookupKey != "" && key == opts.LookupKey {
+			output += opts.ProcessFound(key, val)
 			found = true
-		}
-
-		output += fmt.Sprintf("%s='%s'\n", parsed[0], parsed[1])
-	}
-
-	if !found {
-		output += fmt.Sprintf("%s='%s'\n", key, value)
-	}
-
-	fmt.Println(output)
-
-	if err := os.WriteFile(e.Filepath, []byte(output), 0644); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (e *Env) DetEnv(key string) error {
-	lines, err := e.readFile()
-	if err != nil {
-		return err
-	}
-
-	output := ""
-	for _, line := range lines {
-		parsed := strings.Split(string(line), "=")
-		if len(parsed) != 2 {
-			output += string(line) + "\n"
 			continue
 		}
 
-		if parsed[0] == key {
+		parsedLine := opts.ParseLine(key, val)
+		if parsedLine == "" {
 			continue
 		}
 
-		output += fmt.Sprintf("%s='%s'\n", parsed[0], parsed[1])
+		output += parsedLine
 	}
 
-	if err := os.WriteFile(e.Filepath, []byte(output), 0644); err != nil {
+	if opts.LookupKey != "" && !found {
+		output += opts.OnNotFound()
+	}
+
+	outputFile := opts.OutputFile
+	if outputFile == "" {
+		outputFile = e.Filepath
+	}
+
+	if err := os.WriteFile(outputFile, []byte(output), 0644); err != nil {
 		return err
 	}
-
-	return nil
-}
-
-func (e *Env) GenerateTemplate() error {
-	lines, err := e.readFile()
-	if err != nil {
-		return err
-	}
-
-	output := ""
-	for _, line := range lines {
-		parsed := strings.Split(string(line), "=")
-		if len(parsed) != 2 {
-			output += string(line) + "\n"
-			continue
-		}
-
-		output += fmt.Sprintf("%s='%s'\n", parsed[0], "********")
-	}
-
-	outputFile := e.Filepath + ".template"
-	os.WriteFile(outputFile, []byte(output), 0644)
 
 	return nil
 }
@@ -129,8 +141,4 @@ func (e *Env) readFile() ([]string, error) {
 	}
 
 	return strings.Split(string(lines), "\n"), nil
-}
-
-func init() {
-	fmt.Println("initializing package")
 }
