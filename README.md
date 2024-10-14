@@ -35,13 +35,16 @@ pkg decrypt <file> - decrypt a file
 pkg envs del <name>         - remove an environment variable
 pkg envs get <name>         - get an environment variable
 pkg envs set <name> <value> - set an environment variable
+
+# managing versions
+pkg version <patch|minor|major> - manage semantic versioning
+pkg version -f path <release>   - bump version in a json file
 ```
 
 ## Coming soon
 
 ```bash
 pkg envs init <name>                - create a new environment file
-pkg version [patch|minor|major]     - manage semantic versioning
 pkg <guthub-username>/<repo> [name] - close repo as template for a new [name] project (like degit)
 ```
 
