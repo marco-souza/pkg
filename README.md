@@ -10,7 +10,9 @@ CLI tool to speed-up software development
 
 - scaffold a new go module
 - encrypt and decrypt files
-- ...
+- manage environment variables
+- manage semantic versioning
+- use repos as template for a new project (like degit) - `git` is required
 
 ## Installation
 
@@ -39,6 +41,9 @@ pkg envs set <name> <value> - set an environment variable
 # managing versions
 pkg version <patch|minor|major> - manage semantic versioning
 pkg version -f path <release>   - bump version in a json file
+
+# using repos as templates
+pkg clone <github-username>/<repo> [name] - clone repo as template for a new [name] project
 ```
 
 ## Coming soon
