@@ -39,8 +39,8 @@ pkg envs get <name>         - get an environment variable
 pkg envs set <name> <value> - set an environment variable
 
 # managing versions
-pkg version <patch|minor|major> - manage semantic versioning
-pkg version -f path <release>   - bump version in a json file
+pkg semver <patch|minor|major> - manage semantic versioning
+pkg semver -f file.json <release>   - bump version in a json file
 
 # using repos as templates
 pkg clone <github-username>/<repo> [name] - clone repo as template for a new [name] project
