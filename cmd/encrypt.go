@@ -18,28 +18,18 @@ var encryptCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := args[0]
 		filepath := path.Join(os.Getenv("PWD"), filename)
-
-		// get password from .pass file
-		passfile := ".pass"
-		passphrase := DEFAULT_PASSPHRASE
-
-		if _, err := os.Stat(passfile); err == nil {
-			file, err := os.ReadFile(passfile)
-			if err != nil {
-				fmt.Println("Error reading passphrase file", err)
-				os.Exit(1)
-			}
-
-			passphrase = string(file)
-		}
+		passphrase := Must(encrypt.GetPassphase(passphraseFlag))
 
 		if err := encrypt.EncryptFile(filepath, passphrase); err != nil {
 			fmt.Println("Error encrypting file", err)
 			os.Exit(1)
 		}
+
+		fmt.Println("File encrypted successfully:", filepath+".gpg")
 	},
 }
 
 func init() {
+	encryptCmd.Flags().StringVarP(&passphraseFlag, "passphrase", "p", "", "Passphrase to use for encryption (optional, uses .pass file as fallback)")
 	rootCmd.AddCommand(encryptCmd)
 }

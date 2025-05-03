@@ -90,3 +90,24 @@ func DecryptFile(filepath, passphrase string) error {
 
 	return nil
 }
+
+func GetPassphase(passphrase string) (string, error) {
+	if passphrase != "" {
+		return passphrase, nil
+	}
+
+	// INFO: get password from flag or .pass file
+
+	passfile := ".pass"
+	if _, err := os.Stat(passfile); err != nil {
+		return "", fmt.Errorf("passphrase file not found: %w", err)
+	}
+
+	file, err := os.ReadFile(passfile)
+	if err != nil {
+		fmt.Println("Error reading passphrase file", err)
+		return "", err
+	}
+
+	return string(file), nil
+}

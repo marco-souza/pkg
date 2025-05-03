@@ -9,8 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const DEFAULT_PASSPHRASE = "password"
-
 var decryptCmd = &cobra.Command{
 	Use:        "decrypt",
 	Short:      "Decrypt a file",
@@ -20,29 +18,19 @@ var decryptCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		filename := args[0]
 		filepath := path.Join(os.Getenv("PWD"), filename)
-
-		// get password from .pass file
-		passfile := ".pass"
-		passphrase := DEFAULT_PASSPHRASE
-
-		if _, err := os.Stat(passfile); err == nil {
-			file, err := os.ReadFile(passfile)
-			if err != nil {
-				fmt.Println("Error reading passphrase file", err)
-				os.Exit(1)
-			}
-
-			passphrase = string(file)
-		}
+		passphrase := Must(encrypt.GetPassphase(passphraseFlag))
 
 		// TODO: add timeout in case passphrase is not valid
 		if err := encrypt.DecryptFile(filepath, passphrase); err != nil {
 			fmt.Println("Error decrypting file", err)
 			os.Exit(1)
 		}
+
+		fmt.Println("File decrypted successfully:", filepath[:len(filepath)-4])
 	},
 }
 
 func init() {
+	decryptCmd.Flags().StringVarP(&passphraseFlag, "passphrase", "p", "", "Passphrase to use for encryption (optional, uses .pass file as fallback)")
 	rootCmd.AddCommand(decryptCmd)
 }

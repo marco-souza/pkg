@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/marco-souza/pkg/internal/encrypt"
 	"github.com/marco-souza/pkg/internal/envs"
@@ -51,9 +50,9 @@ var envsSetCmd = &cobra.Command{
 		}
 
 		// as password from user input
-		password := getPassphrase()
 		fmt.Println("update encrypted file")
-		encrypt.EncryptFile(env.Filepath, password)
+		passphrase := Must(encrypt.GetPassphase(passphraseFlag))
+		encrypt.EncryptFile(env.Filepath, passphrase)
 	},
 }
 
@@ -74,31 +73,15 @@ var envsDelCmd = &cobra.Command{
 			return
 		}
 
-		// as password from user input
-		password := getPassphrase()
 		fmt.Println("update encrypted file")
-		encrypt.EncryptFile(env.Filepath, password)
+		passphrase := Must(encrypt.GetPassphase(passphraseFlag))
+		encrypt.EncryptFile(env.Filepath, passphrase)
 	},
 }
 
-func getPassphrase() string {
-	passfile := ".pass"
-	passphrase := DEFAULT_PASSPHRASE
-
-	if _, err := os.Stat(passfile); err == nil {
-		file, err := os.ReadFile(passfile)
-		if err != nil {
-			fmt.Println("Error reading passphrase file", err)
-			os.Exit(1)
-		}
-
-		passphrase = string(file)
-	}
-
-	return passphrase
-}
-
 func init() {
+	envsCmd.Flags().StringVarP(&passphraseFlag, "passphrase", "p", "", "Passphrase to use for encryption (optional, uses .pass file as fallback)")
+
 	envsCmd.AddCommand(envsGetCmd)
 	envsCmd.AddCommand(envsSetCmd)
 	envsCmd.AddCommand(envsDelCmd)
